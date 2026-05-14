@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TechTrend AI Agent — IT 기획안 자동 생성</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/marked@9.1.6/marked.min.js"></script>
+<script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
+
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "hansol-blue": "#005CAB",
+        "primary": "#004482",
+        "on-primary": "#ffffff",
+        "primary-container": "#005cab",
+        "on-primary-container": "#bdd6ff",
+        "primary-fixed": "#d5e3ff",
+        "on-primary-fixed": "#001c3b",
+        "secondary": "#366095",
+        "secondary-container": "#9bc3fe",
+        "on-secondary-container": "#235084",
+        "surface": "#f9f9f9",
+        "surface-gray": "#F5F5F5",
+        "surface-container-lowest": "#ffffff",
+        "surface-container-low": "#f3f3f3",
+        "surface-container": "#eeeeee",
+        "surface-container-high": "#e8e8e8",
+        "surface-container-highest": "#e2e2e2",
+        "on-surface": "#1a1c1c",
+        "on-surface-variant": "#414751",
+        "background": "#f9f9f9",
+        "on-background": "#1a1c1c",
+        "border-subtle": "#E0E0E0",
+        "outline": "#727783",
+        "outline-variant": "#c1c6d3",
+        "text-primary": "#1A1A1A",
+        "text-secondary": "#666666",
+        "error": "#ba1a1a",
+      },
+      borderRadius: {
+        "DEFAULT": "0.25rem",
+        "sm": "0.125rem",
+        "lg": "0.5rem",
+        "xl": "0.75rem",
+        "full": "9999px",
+      },
+      spacing: {
+        "margin-mobile": "16px",
+        "container-max": "1440px",
+        "gutter": "24px",
+        "stack-lg": "32px",
+        "stack-md": "16px",
+        "margin-desktop": "40px",
+        "stack-sm": "8px",
+        "section-gap": "64px",
+      },
+      fontFamily: {
+        "body-lg": ["Noto Sans KR"],
+        "body-md": ["Noto Sans KR"],
+        "title-lg": ["Open Sans"],
+        "headline-md": ["Open Sans"],
+        "headline-lg": ["Open Sans"],
+        "label-md": ["Open Sans"],
+        "display-lg": ["Open Sans"],
+        "caption": ["Noto Sans KR"],
+      },
+      fontSize: {
+        "body-lg":    ["18px", {lineHeight:"28px", fontWeight:"400"}],
+        "body-md":    ["16px", {lineHeight:"24px", fontWeight:"400"}],
+        "title-lg":   ["20px", {lineHeight:"28px", fontWeight:"600"}],
+        "headline-md":["24px", {lineHeight:"32px", fontWeight:"600"}],
+        "headline-lg":["32px", {lineHeight:"40px", letterSpacing:"-0.01em", fontWeight:"700"}],
+        "label-md":   ["14px", {lineHeight:"20px", letterSpacing:"0.05em", fontWeight:"600"}],
+        "display-lg": ["48px", {lineHeight:"60px", letterSpacing:"-0.02em", fontWeight:"700"}],
+        "caption":    ["12px", {lineHeight:"16px", fontWeight:"400"}],
+      }
+    }
+  }
+}
+</script>
+
+<style>
+  /* ─── Material Icons ─── */
+  .material-symbols-outlined {
+    font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
+    vertical-align:middle; line-height:1;
+  }
+  .icon-fill { font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24; }
+
+  /* ─── Scrollbar ─── */
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:#E0E0E0; border-radius:10px; }
+  ::-webkit-scrollbar-thumb:hover { background:#c1c6d3; }
+
+  /* ─── Markdown render ─── */
+  .md h1 { font-family:'Open Sans'; font-size:1.75rem; font-weight:700; color:#004482; margin-bottom:1.25rem; }
+  .md h2 { font-family:'Open Sans'; font-size:1.2rem; font-weight:700; color:#1A1A1A; margin-top:2rem; margin-bottom:0.75rem; border-left:4px solid #005CAB; padding-left:0.875rem; }
+  .md h3 { font-family:'Open Sans'; font-size:1.05rem; font-weight:600; color:#1A1A1A; margin-top:1.5rem; margin-bottom:0.5rem; }
+  .md p  { font-family:'Noto Sans KR'; font-size:0.9375rem; line-height:1.8; color:#414751; margin-bottom:0.75rem; }
+  .md ul, .md ol { margin-left:1.5rem; margin-bottom:0.875rem; }
+  .md ul { list-style-type:disc; }
+  .md ol { list-style-type:decimal; }
+  .md li { font-family:'Noto Sans KR'; font-size:0.9375rem; line-height:1.75; color:#414751; margin-bottom:0.35rem; }
+  .md strong { color:#1A1A1A; }
+  .md hr { border-color:#E0E0E0; margin:1.5rem 0; }
+  .md table { width:100%; border-collapse:collapse; margin-bottom:1rem; font-size:0.875rem; }
+  .md th { background:#F5F5F5; color:#005CAB; padding:0.5rem 0.875rem; text-align:left; border:1px solid #E0E0E0; font-weight:600; }
+  .md td { padding:0.5rem 0.875rem; border:1px solid #E0E0E0; color:#414751; }
+  .md tr:hover td { background:#F0F7FF; }
+  .md blockquote { border-left:3px solid #005CAB; padding-left:1rem; color:#727783; font-style:italic; margin:1rem 0; }
+
+  /* ─── Animations ─── */
+  @keyframes spin    { to { transform:rotate(360deg); } }
+  @keyframes pulse   { 0%,100%{opacity:1} 50%{opacity:.45} }
+  @keyframes fadeSlideIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+  .spin   { animation:spin   1s linear infinite; }
+  .pulse  { animation:pulse  1.5s ease-in-out infinite; }
+  .fade-in{ animation:fadeSlideIn .25s ease-out forwards; }
+
+  /* ─── Nav item ─── */
+  .nav-item {
+    display:flex; align-items:center; gap:0.75rem; padding:0.7rem 0.75rem;
+    border-radius:0.5rem; cursor:pointer; transition:background .15s, color .15s;
+    color:#414751;
+  }
+  .nav-item:hover { background:#eeeeee; }
+  .nav-item.active { background:#d5e3ff; color:#001c3b; font-weight:700; }
+
+  /* ─── Progress bar ─── */
+  .pbar { height:100%; background:#005CAB; border-radius:4px; transition:width .35s ease; }
+
+  /* ─── Source card active state ─── */
+  .src-card { transition:border-color .15s, box-shadow .15s; }
+  .src-card:hover { border-color:#005CAB; }
+  .src-card.live { border-color:#005CAB; box-shadow:0 0 0 3px rgba(0,92,171,.12); }
+
+  /* ─── Views (SPA) ─── */
+  .view { display:none; }
+</style>
+</head>
+
+<body class="bg-background text-on-background font-body-md" style="display:flex;flex-direction:column;height:100vh;overflow:hidden;">
+
+<!-- ═══════════════════════════ TOP NAV ═══════════════════════════ -->
+<header class="bg-surface-container-lowest border-b border-border-subtle" style="flex-shrink:0;height:64px;">
+  <div class="flex justify-between items-center h-full px-10 w-full max-w-[1440px] mx-auto">
+    <div class="flex items-center gap-8">
+      <span class="font-headline-md text-headline-md font-bold text-hansol-blue cursor-pointer select-none"
+            onclick="nav('home')">TechTrend AI Agent</span>
+      <nav class="hidden md:flex gap-6">
+        <span onclick="nav('collect')" class="cursor-pointer font-label-md text-label-md text-on-surface-variant hover:text-hansol-blue transition-colors">데이터 분석</span>
+        <span onclick="nav('generate')" class="cursor-pointer font-label-md text-label-md text-on-surface-variant hover:text-hansol-blue transition-colors">기획안 생성</span>
+        <span onclick="nav('results')" class="cursor-pointer font-label-md text-label-md text-on-surface-variant hover:text-hansol-blue transition-colors">기획 아카이브</span>
+      </nav>
+    </div>
+    <div class="flex items-center gap-3">
+      <div id="api-badge" class="hidden items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 rounded-full text-caption font-bold border border-green-200">
+        <span class="w-1.5 h-1.5 rounded-full bg-green-500 pulse"></span> API 연결됨
+      </div>
+      <button class="p-2 hover:bg-surface-container-low rounded-full transition-all">
+        <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+      </button>
+      <button class="p-2 hover:bg-surface-container-low rounded-full transition-all">
+        <span class="material-symbols-outlined text-on-surface-variant">help</span>
+      </button>
+      <div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center border border-border-subtle">
+        <span class="material-symbols-outlined text-on-surface-variant" style="font-size:18px;">person</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════ BODY ═══════════════════════════ -->
+<div style="display:flex;flex:1;overflow:hidden;max-width:1440px;margin:0 auto;width:100%;">
+
+  <!-- ─────────── SIDEBAR ─────────── -->
+  <aside class="hidden md:flex flex-col border-r border-border-subtle bg-surface-container-lowest"
+         style="width:260px;flex-shrink:0;overflow-y:auto;">
+
+    <!-- API Key Section -->
+    <div class="p-3 pb-3 border-b border-border-subtle">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 rounded-lg bg-hansol-blue/10 flex items-center justify-center text-hansol-blue flex-shrink-0">
+          <span class="material-symbols-outlined">smart_toy</span>
+        </div>
+        <div class="min-w-0">
+          <p class="font-label-md text-label-md text-hansol-blue font-bold">AI 분석 엔진</p>
+          <p id="sb-api-status" class="text-caption text-outline truncate">API 키 미입력</p>
+        </div>
+      </div>
+      <div class="space-y-2">
+        <input id="sb-key" type="password" placeholder="sk-..."
+               class="w-full h-9 px-3 bg-white border border-border-subtle rounded text-sm focus:border-hansol-blue focus:ring-2 focus:ring-hansol-blue/30 outline-none transition-all"/>
+        <button onclick="validateKey()"
+                class="w-full h-9 bg-hansol-blue text-white font-label-md text-label-md rounded hover:opacity-90 active:scale-[.98] transition-all flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined" style="font-size:16px;">verified_user</span>
+          API 키 검증
+        </button>
+      </div>
+      <div id="sb-key-msg" class="mt-2 text-caption hidden"></div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="flex-1 p-2 space-y-0.5">
+      <div class="nav-item" id="nav-home"     onclick="nav('home')">
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-label-md text-label-md">홈 / 현황</span>
+      </div>
+      <div class="nav-item" id="nav-collect"  onclick="nav('collect')">
+        <span class="material-symbols-outlined">rss_feed</span>
+        <span class="font-label-md text-label-md">데이터 수집 모드</span>
+      </div>
+      <div class="nav-item" id="nav-generate" onclick="nav('generate')">
+        <span class="material-symbols-outlined">description</span>
+        <span class="font-label-md text-label-md">기획안 생성 모드</span>
+      </div>
+      <div class="nav-item" id="nav-results"  onclick="nav('results')">
+        <span class="material-symbols-outlined">auto_awesome</span>
+        <span class="font-label-md text-label-md">생성 결과 보기</span>
+      </div>
+    </nav>
+
+    <!-- Bottom -->
+    <div class="p-2 pt-0 border-t border-border-subtle space-y-1">
+      <div class="flex items-center justify-between px-3 py-2 bg-surface-gray rounded-lg">
+        <span class="text-caption text-on-surface-variant">저장된 문서</span>
+        <span id="sb-doc-cnt" class="font-label-md text-label-md text-hansol-blue font-bold">0개</span>
+      </div>
+      <div class="nav-item">
+        <span class="material-symbols-outlined">contact_support</span>
+        <span class="font-label-md text-label-md">도움말</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─────────── MAIN CONTENT ─────────── -->
+  <div id="main-wrap" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+
+    <!-- ══ VIEW: HOME ══ -->
+    <div id="view-home" class="view" style="flex:1;overflow-y:auto;">
+      <div class="p-10">
+      <div class="max-w-5xl mx-auto space-y-8">
+
+        <!-- Hero -->
+        <section class="bg-white rounded-xl border border-border-subtle p-10 flex flex-col md:flex-row items-center gap-8">
+          <div class="flex-1">
+            <span class="inline-block px-3 py-1 bg-hansol-blue/10 text-hansol-blue font-label-md text-label-md rounded-full mb-4">Hansol Intelligence</span>
+            <h1 class="font-headline-lg text-headline-lg text-text-primary mb-4 leading-tight">
+              미래를 예측하는<br/>IT 기획안 에이전트
+            </h1>
+            <p class="font-body-lg text-body-lg text-text-secondary max-w-md mb-8">
+              최신 국내 IT 기술 동향을 실시간으로 수집·분석하여, 귀사의 비즈니스에 최적화된 IT 기획안 초안을 단 몇 분 만에 생성합니다.
+            </p>
+            <div class="flex flex-wrap gap-3">
+              <button onclick="nav('collect')"
+                      class="bg-hansol-blue text-white px-6 py-3 rounded-lg font-label-md flex items-center gap-2 hover:bg-primary transition-all">
+                데이터 수집 시작 <span class="material-symbols-outlined" style="font-size:18px;">rss_feed</span>
+              </button>
+              <button onclick="nav('generate')"
+                      class="border border-hansol-blue text-hansol-blue px-6 py-3 rounded-lg font-label-md flex items-center gap-2 hover:bg-surface-container-low transition-all">
+                기획안 생성하기 <span class="material-symbols-outlined" style="font-size:18px;">description</span>
+              </button>
+            </div>
+          </div>
+          <div class="flex-1 w-full max-w-xs">
+            <div class="aspect-square bg-surface-gray rounded-2xl flex items-center justify-center border border-border-subtle">
+              <div class="text-center p-8">
+                <span class="material-symbols-outlined text-hansol-blue/25" style="font-size:80px;">psychology</span>
+                <p class="font-headline-md text-headline-md text-hansol-blue mt-4">GPT-4o mini</p>
+                <p class="text-caption text-on-surface-variant">RAG 기반 IT 기획안 생성</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Dashboard grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- API Status Card -->
+          <div class="md:col-span-2 bg-white rounded-xl border border-border-subtle overflow-hidden">
+            <div class="p-4 bg-surface-gray border-b border-border-subtle flex justify-between items-center">
+              <h2 class="font-title-lg text-title-lg text-hansol-blue">실시간 API 연결 상태</h2>
+              <span id="home-api-badge"
+                    class="flex items-center gap-1.5 px-2.5 py-1 bg-red-50 text-red-700 text-caption font-bold rounded-full border border-red-100">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span> NOT CONNECTED
+              </span>
+            </div>
+            <div class="p-8 flex flex-col items-center justify-center text-center space-y-4 min-h-[200px]">
+              <div id="home-api-icon"
+                   class="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center">
+                <span class="material-symbols-outlined text-red-400" style="font-size:32px;">key_off</span>
+              </div>
+              <div>
+                <h3 id="home-api-title" class="font-headline-md text-headline-md text-text-primary">API 키를 입력해주세요</h3>
+                <p id="home-api-desc" class="font-body-md text-text-secondary mt-1 text-sm">
+                  왼쪽 사이드바에서 OpenAI API 키를 입력하고 검증하면 모든 기능이 활성화됩니다.
+                </p>
+              </div>
+              <div class="flex gap-4 w-full max-w-sm">
+                <div class="flex-1 p-3 bg-surface-gray rounded text-left">
+                  <p class="text-caption text-text-secondary mb-1">저장된 문서</p>
+                  <p id="home-doc-cnt" class="font-title-lg text-title-lg">0개</p>
+                </div>
+                <div class="flex-1 p-3 bg-surface-gray rounded text-left">
+                  <p class="text-caption text-text-secondary mb-1">생성된 기획안</p>
+                  <p id="home-plan-cnt" class="font-title-lg text-title-lg">0개</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Side panel -->
+          <div class="space-y-4">
+            <div class="bg-white p-4 rounded-xl border border-border-subtle">
+              <h4 class="font-label-md text-label-md text-text-secondary mb-3">수집 소스 (5개)</h4>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-hansol-blue"></span><span class="text-label-md text-text-primary">전자신문</span></div>
+                <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-hansol-blue"></span><span class="text-label-md text-text-primary">디지털데일리</span></div>
+                <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-hansol-blue"></span><span class="text-label-md text-text-primary">IT조선</span></div>
+                <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-outline-variant"></span><span class="text-label-md text-text-primary">NIPA 공지</span></div>
+                <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-outline-variant"></span><span class="text-label-md text-text-primary">보안뉴스</span></div>
+              </div>
+            </div>
+            <button onclick="nav('generate')"
+                    class="w-full bg-surface-gray border border-border-subtle p-4 rounded-xl text-center group hover:border-hansol-blue transition-all">
+              <span class="material-symbols-outlined text-hansol-blue mb-1 group-hover:scale-110 transition-transform" style="font-size:32px;">add_circle</span>
+              <p class="font-label-md text-text-primary">새 기획안 생성하기</p>
+            </button>
+          </div>
+        </div>
+
+        <!-- Steps -->
+        <section class="bg-white rounded-xl border border-border-subtle p-8">
+          <h2 class="font-title-lg text-title-lg text-hansol-blue mb-6">사용 방법</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="text-center">
+              <div class="w-12 h-12 rounded-full bg-hansol-blue/10 flex items-center justify-center text-hansol-blue mx-auto mb-3">
+                <span class="material-symbols-outlined">key</span></div>
+              <p class="font-label-md text-label-md text-text-primary mb-1">1. API 키 입력</p>
+              <p class="text-caption text-text-secondary">사이드바에서 OpenAI 키 검증</p>
+            </div>
+            <div class="text-center">
+              <div class="w-12 h-12 rounded-full bg-hansol-blue/10 flex items-center justify-center text-hansol-blue mx-auto mb-3">
+                <span class="material-symbols-outlined">rss_feed</span></div>
+              <p class="font-label-md text-label-md text-text-primary mb-1">2. 데이터 수집</p>
+              <p class="text-caption text-text-secondary">국내 IT 뉴스 키워드 수집</p>
+            </div>
+            <div class="text-center">
+              <div class="w-12 h-12 rounded-full bg-hansol-blue/10 flex items-center justify-center text-hansol-blue mx-auto mb-3">
+                <span class="material-symbols-outlined">auto_awesome</span></div>
+              <p class="font-label-md text-label-md text-text-primary mb-1">3. 기획안 생성</p>
+              <p class="text-caption text-text-secondary">RAG + GPT-4o mini 작성</p>
+            </div>
+            <div class="text-center">
+              <div class="w-12 h-12 rounded-full bg-hansol-blue/10 flex items-center justify-center text-hansol-blue mx-auto mb-3">
+                <span class="material-symbols-outlined">download</span></div>
+              <p class="font-label-md text-label-md text-text-primary mb-1">4. 내보내기</p>
+              <p class="text-caption text-text-secondary">DOCX / Markdown 다운로드</p>
+            </div>
+          </div>
+        </section>
+      </div>
+      </div>
+    </div><!-- /view-home -->
+
+    <!-- ══ VIEW: COLLECT ══ -->
+    <div id="view-collect" class="view" style="flex:1;overflow-y:auto;">
+      <div class="p-10">
+      <div class="max-w-5xl mx-auto space-y-6">
+
+        <!-- 페이지 제목 -->
+        <div>
+          <h1 class="font-headline-lg text-headline-lg text-text-primary">데이터 수집 모드</h1>
+          <p class="font-body-md text-text-secondary mt-1">국내 IT 뉴스 RSS 피드를 수집하여 RAG 지식베이스를 구성합니다.</p>
+        </div>
+
+        <!-- 키워드 입력 바 -->
+        <div class="bg-white border border-border-subtle p-6 rounded-xl flex flex-col md:flex-row gap-4 items-end">
+          <div class="flex-1 w-full">
+            <label class="block font-label-md text-label-md text-on-surface-variant mb-2">수집 키워드 (쉼표 구분, 비워두면 전체 수집)</label>
+            <input id="c-kw" type="text" placeholder="예: AI, 클라우드, 핀테크, 디지털전환"
+                   class="w-full bg-white border border-border-subtle rounded-lg px-4 py-3 focus:outline-none focus:border-hansol-blue focus:ring-2 focus:ring-hansol-blue/30 transition-all font-body-md"/>
+          </div>
+          <div class="flex-shrink-0">
+            <label class="block font-label-md text-label-md text-on-surface-variant mb-2">소스당 최대</label>
+            <select id="c-max" class="h-[50px] px-4 bg-white border border-border-subtle rounded-lg focus:outline-none focus:border-hansol-blue transition-all font-body-md">
+              <option value="10">10개</option>
+              <option value="20" selected>20개</option>
+              <option value="30">30개</option>
+            </select>
+          </div>
+          <button id="c-btn" onclick="startCollect()"
+                  class="flex-shrink-0 bg-hansol-blue text-white px-7 py-3 rounded-lg font-label-md font-bold hover:opacity-90 transition-all flex items-center gap-2 h-[50px]">
+            <span class="material-symbols-outlined icon-fill">play_arrow</span> 수집 시작
+          </button>
+        </div>
+
+        <!-- 진행 상황 -->
+        <div id="c-prog-area" class="hidden bg-white border border-border-subtle p-6 rounded-xl fade-in">
+          <div class="flex justify-between items-center mb-2">
+            <p id="c-prog-label" class="font-label-md text-label-md text-text-primary">준비 중...</p>
+            <span id="c-prog-pct" class="font-label-md text-label-md text-hansol-blue">0%</span>
+          </div>
+          <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+            <div id="c-prog-bar" class="pbar" style="width:0%"></div>
+          </div>
+          <div id="c-log" class="mt-3 space-y-0.5 max-h-28 overflow-y-auto"></div>
+        </div>
+
+        <!-- 수집 소스 카드 -->
+        <div>
+          <h2 class="font-title-lg text-title-lg text-text-primary mb-4">수집 대상 소스</h2>
+          <div id="src-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4"></div>
+        </div>
+
+        <!-- ★ 지표 + 이력 (나란히 배치 — 원본 it/code.html 레이아웃) ★ -->
+        <div id="c-hist-section" class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+
+          <!-- 지표 카드 (1열) -->
+          <div class="lg:col-span-1 flex flex-col gap-4">
+            <div class="bg-hansol-blue text-white p-6 rounded-xl shadow-sm">
+              <div class="text-caption opacity-75 uppercase tracking-widest mb-1">저장된 총 문서 수</div>
+              <div id="c-doc-cnt" class="text-[40px] font-bold leading-none mt-2">0</div>
+              <div class="flex items-center text-caption mt-4 opacity-80">
+                <span class="material-symbols-outlined" style="font-size:15px;margin-right:4px;">database</span>
+                <span>localStorage 저장</span>
+              </div>
+            </div>
+            <div class="bg-white border border-border-subtle p-4 rounded-xl">
+              <div class="text-caption text-text-secondary mb-1">마지막 수집 일시</div>
+              <div id="c-last-dt" class="font-label-md text-label-md text-text-primary">—</div>
+            </div>
+            <button onclick="clearAllDocs()"
+                    class="w-full border border-red-200 text-red-500 text-caption py-2 rounded-lg hover:bg-red-50 transition-all">
+              문서 초기화
+            </button>
+          </div>
+
+          <!-- 이력 테이블 (3열) -->
+          <div class="lg:col-span-3 bg-white border border-border-subtle rounded-xl overflow-hidden">
+            <div class="bg-surface-gray px-6 py-4 border-b border-border-subtle flex justify-between items-center">
+              <h3 class="font-title-lg text-title-lg text-hansol-blue">최근 수집 이력</h3>
+              <span id="c-hist-badge" class="text-caption text-on-surface-variant"></span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left">
+                <thead class="border-b border-border-subtle">
+                  <tr class="bg-surface-gray/50">
+                    <th class="px-5 py-3 font-label-md text-label-md text-on-surface-variant">일시</th>
+                    <th class="px-5 py-3 font-label-md text-label-md text-on-surface-variant">수집 소스</th>
+                    <th class="px-5 py-3 font-label-md text-label-md text-on-surface-variant">키워드</th>
+                    <th class="px-5 py-3 font-label-md text-label-md text-on-surface-variant text-center">건수</th>
+                    <th class="px-5 py-3 font-label-md text-label-md text-on-surface-variant text-right">상태</th>
+                  </tr>
+                </thead>
+                <tbody id="c-hist-body" class="divide-y divide-border-subtle">
+                  <tr><td colspan="5" class="px-5 py-10 text-center text-caption text-on-surface-variant">수집 이력이 없습니다.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div><!-- /grid -->
+
+        <!-- ★ 수집 문서 목록 (선택 → 기획안 생성) ★ -->
+        <div class="space-y-4 pb-4">
+
+          <!-- 섹션 헤더 + 필터 -->
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <h2 class="font-title-lg text-title-lg text-text-primary flex items-center gap-2">
+              <span class="material-symbols-outlined text-hansol-blue" style="font-size:20px;">list</span>
+              수집된 문서 목록
+            </h2>
+            <div class="flex items-center gap-2 flex-wrap">
+              <input id="dl-kw" type="text" placeholder="제목/내용 검색..."
+                     oninput="renderDocList()"
+                     class="h-9 px-3 bg-white border border-border-subtle rounded-lg text-sm focus:outline-none focus:border-hansol-blue focus:ring-2 focus:ring-hansol-blue/30 w-44 transition-all"/>
+              <select id="dl-src" onchange="renderDocList()"
+                      class="h-9 px-3 bg-white border border-border-subtle rounded-lg text-sm focus:outline-none focus:border-hansol-blue transition-all">
+                <option value="">전체 소스</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 선택 컨트롤 바 -->
+          <div class="bg-white border border-border-subtle rounded-xl px-5 py-3 flex items-center justify-between gap-3 flex-wrap">
+            <div class="flex items-center gap-3">
+              <label class="flex items-center gap-2 cursor-pointer select-none">
+                <input id="dl-all-cb" type="checkbox" onchange="toggleSelectAll()"
+                       class="rounded border-border-subtle text-hansol-blue focus:ring-hansol-blue"/>
+                <span class="font-label-md text-label-md text-on-surface-variant">전체 선택</span>
+              </label>
+              <span id="dl-sel-cnt" class="text-caption text-hansol-blue font-bold hidden"></span>
+              <button onclick="clearDocSelection()"
+                      id="dl-clear-btn"
+                      class="hidden text-caption text-outline hover:text-red-500 transition-colors underline">
+                선택 해제
+              </button>
+            </div>
+            <div class="flex items-center gap-3">
+              <span id="dl-total-cnt" class="text-caption text-on-surface-variant"></span>
+              <button id="dl-gen-btn" onclick="goGenerateWithSelected()" disabled
+                      class="flex items-center gap-1.5 px-4 py-2 bg-hansol-blue text-white rounded-lg font-label-md text-sm hover:bg-primary transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+                <span class="material-symbols-outlined" style="font-size:15px;">description</span>
+                선택 문서로 기획안 생성
+              </button>
+            </div>
+          </div>
+
+          <!-- 문서 목록 테이블 -->
+          <div class="bg-white border border-border-subtle rounded-xl overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left">
+                <thead class="border-b border-border-subtle">
+                  <tr class="bg-surface-gray/50">
+                    <th class="w-10 px-4 py-3"></th>
+                    <th class="px-5 py-3 font-label-md text-label-md text-on-surface-variant">제목 / 내용</th>
+                    <th class="px-5 py-3 font-label-md text-label-md text-on-surface-variant w-28">소스</th>
+                    <th class="px-5 py-3 font-label-md text-label-md text-on-surface-variant w-28">날짜</th>
+                  </tr>
+                </thead>
+                <tbody id="dl-tbody" class="divide-y divide-border-subtle">
+                  <tr><td colspan="4" class="px-5 py-10 text-center text-caption text-on-surface-variant">수집된 문서가 없습니다.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- 페이지네이션 -->
+            <div id="dl-pagination" class="hidden items-center justify-between px-5 py-3 border-t border-border-subtle">
+              <span id="dl-page-info" class="text-caption text-on-surface-variant"></span>
+              <div class="flex items-center gap-1">
+                <button onclick="dlPrev()" id="dl-prev-btn"
+                        class="px-3 py-1.5 border border-border-subtle text-sm rounded-lg bg-white hover:bg-surface-gray disabled:opacity-40 disabled:cursor-not-allowed transition-all">이전</button>
+                <span id="dl-page-btns" class="flex gap-1"></span>
+                <button onclick="dlNext()" id="dl-next-btn"
+                        class="px-3 py-1.5 border border-border-subtle text-sm rounded-lg bg-white hover:bg-surface-gray disabled:opacity-40 disabled:cursor-not-allowed transition-all">다음</button>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /문서 목록 -->
+
+      </div>
+      </div>
+    </div><!-- /view-collect -->
+
+    <!-- ══ VIEW: GENERATE ══ -->
+    <div id="view-generate" class="view" style="flex:1;overflow-y:auto;display:flex;align-items:center;justify-content:center;background-color:#ffffff;background-image:radial-gradient(at 100% 0%,#f0f7ff 0px,transparent 50%),radial-gradient(at 0% 100%,#f5f5f5 0px,transparent 50%);position:relative;overflow:hidden;">
+      <!-- 배경 장식 -->
+      <div style="position:absolute;top:0;right:0;padding:5rem;opacity:.06;pointer-events:none;">
+        <span class="material-symbols-outlined text-hansol-blue" style="font-size:280px;">blur_on</span>
+      </div>
+      <div class="w-full max-w-2xl px-6 py-10">
+        <div class="text-center mb-10">
+          <h2 class="font-headline-lg text-headline-lg text-hansol-blue mb-3">신규 기획안 생성</h2>
+          <p class="font-body-lg text-body-lg text-on-surface-variant">수집된 IT 동향 데이터를 기반으로 기획안 초안을 작성합니다.</p>
+          <div id="g-warn" class="mt-3 hidden">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 text-caption font-bold rounded-full border border-amber-200">
+              <span class="material-symbols-outlined" style="font-size:14px;">warning</span>
+              수집된 문서가 없어 일반 지식으로 생성합니다. 정확도를 높이려면 먼저 데이터를 수집하세요.
+            </span>
+          </div>
+          <div id="g-sel-badge" class="mt-3 hidden">
+            <span class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-hansol-blue text-caption font-bold rounded-full border border-blue-200">
+              <span class="material-symbols-outlined" style="font-size:14px;">checklist</span>
+              선택된 문서 <span id="g-sel-cnt">0</span>개가 참고자료로 사용됩니다
+              <button onclick="clearSelectedDocs()" class="ml-1 text-outline hover:text-red-500 transition-colors" title="선택 해제">✕</button>
+            </span>
+          </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-xl border border-border-subtle shadow-sm">
+          <div class="space-y-5">
+            <div>
+              <label class="block font-label-md text-label-md text-on-surface mb-2">기획 주제</label>
+              <textarea id="g-query" rows="3"
+                        placeholder="예: 금융권 AI 챗봇 도입 기획안&#10;예: 중소기업 클라우드 마이그레이션 전략&#10;예: 공공기관 디지털 전환(DX) 추진 계획"
+                        class="w-full p-4 bg-white border border-border-subtle rounded-lg focus:ring-2 focus:ring-hansol-blue/30 focus:border-hansol-blue outline-none transition-all font-body-md resize-none"></textarea>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label class="block font-label-md text-label-md text-on-surface mb-2">산업 분야</label>
+                <select id="g-industry" class="w-full p-4 bg-white border border-border-subtle rounded-lg focus:ring-2 focus:ring-hansol-blue/30 focus:border-hansol-blue outline-none transition-all font-body-md appearance-none">
+                  <option>금융</option><option>제조</option><option>공공</option>
+                  <option>헬스케어</option><option>유통/물류</option><option>교육</option>
+                  <option>IT/테크</option><option>기타</option>
+                </select>
+              </div>
+              <div>
+                <label class="block font-label-md text-label-md text-on-surface mb-2">조직 규모</label>
+                <select id="g-scale" class="w-full p-4 bg-white border border-border-subtle rounded-lg focus:ring-2 focus:ring-hansol-blue/30 focus:border-hansol-blue outline-none transition-all font-body-md appearance-none">
+                  <option>스타트업</option><option>중소기업</option>
+                  <option>중견기업</option><option>대기업</option><option>공공기관</option>
+                </select>
+              </div>
+            </div>
+            <div class="pt-1">
+              <button id="g-btn" onclick="generatePlan()"
+                      class="w-full bg-hansol-blue text-white py-5 rounded-lg font-label-md text-[16px] flex items-center justify-center gap-3 hover:bg-primary transition-all active:scale-[.99] shadow-md">
+                기획안 생성 시작 <span class="material-symbols-outlined">rocket_launch</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-center flex-wrap gap-6">
+          <div class="flex items-center gap-1.5 text-on-surface-variant">
+            <span class="material-symbols-outlined" style="font-size:16px;">verified</span>
+            <span class="text-caption">실시간 RAG 검색</span>
+          </div>
+          <div class="flex items-center gap-1.5 text-on-surface-variant">
+            <span class="material-symbols-outlined" style="font-size:16px;">auto_awesome</span>
+            <span class="text-caption">GPT-4o mini 스트리밍</span>
+          </div>
+          <div class="flex items-center gap-1.5 text-on-surface-variant">
+            <span class="material-symbols-outlined" style="font-size:16px;">download</span>
+            <span class="text-caption">DOCX · Markdown 내보내기</span>
+          </div>
+        </div>
+      </div>
+    </div><!-- /view-generate -->
+
+    <!-- ══ VIEW: RESULTS ══ -->
+    <div id="view-results" class="view" style="flex:1;flex-direction:column;overflow:hidden;">
+
+      <!-- Results action bar -->
+      <div class="flex items-center justify-between px-8 h-14 bg-white border-b border-border-subtle flex-shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-hansol-blue">auto_awesome</span>
+          <h2 class="font-title-lg text-title-lg text-on-background">기획안 생성 결과</h2>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="dlMd()"
+                  class="flex items-center gap-1.5 px-4 py-2 border border-hansol-blue text-hansol-blue rounded-lg font-label-md text-label-md hover:bg-surface-container-low transition-all text-sm">
+            <span class="material-symbols-outlined" style="font-size:17px;">download</span> Markdown
+          </button>
+          <button onclick="dlDocx()"
+                  class="flex items-center gap-1.5 px-4 py-2 bg-hansol-blue text-white rounded-lg font-label-md text-label-md hover:bg-primary transition-all text-sm">
+            <span class="material-symbols-outlined" style="font-size:17px;">description</span> DOCX
+          </button>
+        </div>
+      </div>
+
+      <!-- Split content -->
+      <div style="display:flex;flex:1;overflow:hidden;">
+
+        <!-- Left: RAG refs -->
+        <section style="width:300px;flex-shrink:0;overflow-y:auto;" class="border-r border-border-subtle bg-surface-gray p-4 space-y-3">
+          <div class="flex items-center justify-between mb-1">
+            <h4 class="font-label-md text-label-md text-on-surface-variant font-bold">참고 자료 (RAG)</h4>
+            <span id="ref-badge" class="bg-secondary-container text-on-secondary-container text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+          </div>
+          <div id="ref-list">
+            <p class="text-caption text-outline">생성 후 참고 자료가 표시됩니다.</p>
+          </div>
+        </section>
+
+        <!-- Right: Plan -->
+        <section style="flex:1;overflow-y:auto;" class="bg-white p-10">
+          <div class="max-w-[760px] mx-auto">
+
+            <!-- Empty state -->
+            <div id="r-empty" class="flex flex-col items-center justify-center py-24 text-center">
+              <span class="material-symbols-outlined text-on-surface-variant/25" style="font-size:64px;">description</span>
+              <h3 class="font-headline-md text-headline-md text-on-surface-variant mt-4 mb-2">기획안이 아직 없습니다</h3>
+              <p class="font-body-md text-text-secondary mb-6">기획안 생성 모드에서 주제를 입력하고 시작해주세요.</p>
+              <button onclick="nav('generate')"
+                      class="bg-hansol-blue text-white px-6 py-3 rounded-lg font-label-md hover:bg-primary transition-all">
+                기획안 생성하러 가기
+              </button>
+            </div>
+
+            <!-- Content -->
+            <div id="r-content" class="md hidden"></div>
+
+            <!-- Feedback -->
+            <div id="r-feedback" class="hidden mt-14 pt-8 border-t border-border-subtle">
+              <div class="bg-surface-container-low p-6 rounded-xl">
+                <div class="flex items-center justify-between mb-4">
+                  <h4 class="font-label-md text-label-md text-on-surface font-bold">기획안 생성 결과가 만족스러우신가요?</h4>
+                  <span id="fb-label" class="flex items-center gap-1 text-hansol-blue font-bold text-sm">
+                    <span class="material-symbols-outlined" style="font-size:18px;">sentiment_satisfied</span> 보통
+                  </span>
+                </div>
+                <input id="fb-slider" type="range" min="0" max="100" value="70"
+                       oninput="updateFbLabel(this.value)"
+                       class="w-full h-2 appearance-none cursor-pointer accent-hansol-blue"/>
+                <div class="flex justify-between mt-1 px-0.5">
+                  <span class="text-caption text-outline">부족함</span>
+                  <span class="text-caption text-outline">보통</span>
+                  <span class="text-caption text-outline">매우 만족</span>
+                </div>
+                <div class="mt-4 flex gap-3">
+                  <input id="fb-text" type="text" placeholder="AI에게 추가 요청사항을 입력하세요..."
+                         class="flex-1 bg-white border border-border-subtle rounded-lg px-4 py-2 text-label-md focus:ring-2 focus:ring-hansol-blue focus:border-hansol-blue outline-none"/>
+                  <button onclick="submitFeedback()"
+                          class="px-5 py-2 bg-hansol-blue text-white rounded-lg font-label-md hover:bg-primary transition-all">보내기</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </div><!-- /view-results -->
+
+  </div><!-- /main-wrap -->
+</div><!-- /body layout -->
+
+<!-- ═══════════════════════════ ARTICLE DETAIL MODAL ═══════════════════════════ -->
+<div id="art-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+     style="background:rgba(26,28,28,0.55);backdrop-filter:blur(2px);"
+     onclick="closeArtModal()">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col"
+       style="max-height:85vh;" onclick="event.stopPropagation()">
+
+    <!-- 모달 헤더 -->
+    <div class="flex items-start justify-between px-7 pt-6 pb-4 border-b border-border-subtle gap-4 flex-shrink-0">
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 mb-3 flex-wrap">
+          <span id="art-source-badge"
+                class="inline-flex items-center gap-1 text-[11px] text-hansol-blue font-bold px-2.5 py-1 bg-blue-50 rounded-full border border-blue-100"></span>
+          <span id="art-date" class="text-caption text-on-surface-variant"></span>
+          <a id="art-link" href="#" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-1 text-[11px] text-on-surface-variant hover:text-hansol-blue transition-colors underline underline-offset-2">
+            <span class="material-symbols-outlined" style="font-size:12px;">open_in_new</span>원문 보기
+          </a>
+        </div>
+        <h2 id="art-title" class="font-headline-md text-headline-md text-text-primary leading-snug"></h2>
+      </div>
+      <button onclick="closeArtModal()"
+              class="flex-shrink-0 mt-0.5 p-2 rounded-full hover:bg-surface-gray transition-colors text-on-surface-variant">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <!-- 본문 -->
+    <div class="flex-1 overflow-y-auto px-7 py-6">
+      <p id="art-content"
+         class="text-[15px] text-on-surface-variant leading-[1.85] whitespace-pre-wrap"
+         style="font-family:'Noto Sans KR',sans-serif;"></p>
+      <p id="art-no-content"
+         class="hidden text-caption text-outline italic mt-2">
+        수집된 본문이 없습니다. 원문에서 전체 기사를 확인하세요.
+      </p>
+    </div>
+
+    <!-- 모달 푸터 -->
+    <div class="flex items-center justify-between px-7 py-4 border-t border-border-subtle bg-surface-gray/60 rounded-b-2xl gap-3 flex-shrink-0 flex-wrap">
+      <!-- 이전/다음 -->
+      <div class="flex items-center gap-1.5">
+        <button onclick="artNavPrev()" id="art-prev-btn"
+                class="flex items-center gap-0.5 px-3 py-1.5 border border-border-subtle text-sm rounded-lg bg-white hover:bg-surface-gray disabled:opacity-35 disabled:cursor-not-allowed transition-all">
+          <span class="material-symbols-outlined" style="font-size:16px;">chevron_left</span>이전
+        </button>
+        <span id="art-nav-info" class="text-caption text-on-surface-variant px-1 tabular-nums"></span>
+        <button onclick="artNavNext()" id="art-next-btn"
+                class="flex items-center gap-0.5 px-3 py-1.5 border border-border-subtle text-sm rounded-lg bg-white hover:bg-surface-gray disabled:opacity-35 disabled:cursor-not-allowed transition-all">
+          다음<span class="material-symbols-outlined" style="font-size:16px;">chevron_right</span>
+        </button>
+      </div>
+      <!-- 선택 버튼 -->
+      <button id="art-sel-btn" onclick="artToggleSel()"
+              class="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-bold transition-all border border-hansol-blue text-hansol-blue hover:bg-blue-50">
+        <span id="art-sel-icon" class="material-symbols-outlined" style="font-size:15px;">check_box_outline_blank</span>
+        <span id="art-sel-label">기획안 참고자료로 선택</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<footer class="bg-surface-container-lowest border-t border-border-subtle" style="flex-shrink:0;">
+  <div class="flex justify-between items-center py-3 px-10 w-full max-w-[1440px] mx-auto">
+    <span class="font-bold text-hansol-blue text-sm">Hansol Tech Trend</span>
+    <span class="text-caption text-on-surface-variant">© 2024 Hansol Tech Trend. All rights reserved.</span>
+    <div class="flex gap-5">
+      <a href="#" class="text-label-md text-on-surface-variant hover:text-primary hover:underline transition-colors text-sm">이용약관</a>
+      <a href="#" class="text-label-md text-on-surface-variant hover:text-primary hover:underline transition-colors text-sm">개인정보처리방침</a>
+      <a href="#" class="text-label-md text-on-surface-variant hover:text-primary hover:underline transition-colors text-sm">고객지원</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════ JAVASCRIPT ═══════════════════════════ -->
+<script>
+/* ───────────────── STATE ───────────────── */
+const S = {
+  apiKey: '',
+  apiOk: false,
+  docs: JSON.parse(localStorage.getItem('rag_docs') || '[]'),
+  hist: JSON.parse(localStorage.getItem('rag_hist') || '[]'),
+  plan: '',
+  refs: [],
+  planCnt: parseInt(localStorage.getItem('plan_cnt') || '0'),
+  view: '',
+  selSet: new Set(),
+  selectedDocs: [],
+};
+
+/* ───────────────── RSS SOURCES ───────────────── */
+const SOURCES = {
+  '전자신문':  'https://rss.etnews.com/Section901.xml',
+  '디지털데일리': 'https://www.ddaily.co.kr/rss/allArticle.xml',
+  'IT조선':   'https://it.chosun.com/rss/',
+  'NIPA 공지': 'https://www.nipa.kr/rss/selectRssList.do',
+  '보안뉴스':  'https://www.boannews.com/rss/',
+};
+const SRC_ICONS = {
+  '전자신문':'newspaper', '디지털데일리':'rss_feed', 'IT조선':'computer',
+  'NIPA 공지':'account_balance', '보안뉴스':'security'
+};
+
+/* ───────────────── MOCK ARTICLES (fallback) ───────────────── */
+const MOCK = [
+  {title:'생성형 AI 기반 비즈니스 자동화 솔루션 도입 확산', source:'전자신문', published:'2024-10-24', url:'#', content:'국내 주요 IT 기업들이 생성형 AI를 활용한 비즈니스 프로세스 자동화 솔루션을 잇달아 출시하고 있다. 금융권과 공공기관을 중심으로 AI 기반 문서 자동화 및 의사결정 지원 시스템 도입이 가속화되고 있으며, 관련 시장 규모는 2025년까지 3조 원을 돌파할 것으로 전망된다. 주요 사례로는 KB국민은행의 AI 대출 심사 시스템, 삼성전자의 AI 기반 공급망 최적화 플랫폼이 있다.'},
+  {title:'클라우드 네이티브 전환: 국내 금융권 마이크로서비스 도입기', source:'디지털데일리', published:'2024-10-23', url:'#', content:'KB국민은행과 신한은행이 레거시 시스템을 클라우드 네이티브 아키텍처로 전환하는 대규모 프로젝트를 추진 중이다. 마이크로서비스 아키텍처(MSA)와 쿠버네티스 기반의 컨테이너 오케스트레이션을 도입하여 시스템 안정성과 확장성을 크게 향상시켰다. 서비스 배포 주기가 기존 분기별에서 주 2회로 단축되었으며, 장애 복구 시간도 90% 감소했다.'},
+  {title:'AI 기반 사이버 보안 위협 탐지 시스템 국내 확산', source:'보안뉴스', published:'2024-10-22', url:'#', content:'인공지능을 활용한 사이버 보안 솔루션의 국내 도입이 빠르게 확산되고 있다. 제로데이 취약점 탐지와 APT 공격 대응에 AI 기반 행위 분석 기술이 효과적으로 활용되고 있으며, 탐지율이 기존 시그니처 기반 솔루션 대비 30% 이상 향상된 것으로 나타났다. KISA와 국내 보안 기업들이 공동 개발한 AI 위협 인텔리전스 플랫폼도 출범했다.'},
+  {title:'공공기관 디지털 전환 가속화: 2024년 전자정부 혁신 현황', source:'NIPA 공지', published:'2024-10-21', url:'#', content:'행정안전부와 과학기술정보통신부가 발표한 2024년 전자정부 혁신 보고서에 따르면 전국 지자체의 78%가 AI 기반 민원 처리 시스템을 도입했으며, 민원 처리 시간이 평균 42% 단축됐다. 2025년까지 전체 공공기관의 클라우드 전환율을 90%까지 높이는 "클라우드 퍼스트 2.0" 정책이 시행된다.'},
+  {title:'디지털 트윈 기술 제조업 적용 사례 급증', source:'IT조선', published:'2024-10-20', url:'#', content:'삼성전자와 LG전자를 포함한 국내 주요 제조기업들이 디지털 트윈 기술을 생산 라인 최적화에 활용하여 생산성을 15~20% 향상시켰다. 가상 환경에서 설비 고장을 사전 예측하고 예방 정비를 실시하는 예지보전 시스템도 적극 도입되고 있으며, 불량률이 평균 35% 감소했다.'},
+  {title:'국내 AI 반도체 경쟁 심화: 엣지 NPU 개발 현황', source:'전자신문', published:'2024-10-19', url:'#', content:'삼성전자, SK하이닉스, 네이버, 카카오 등 국내 주요 기업들이 엣지 컴퓨팅용 AI 반도체(NPU) 개발에 대규모 투자를 진행 중이다. 특히 저전력 설계와 온디바이스 AI 추론 성능 향상에 집중하여 글로벌 AI 반도체 시장에서 경쟁력을 강화하고 있으며, 2025년 NPU 시장 점유율 15% 목표를 설정했다.'},
+  {title:'헬스케어 AI: 대형 병원 의료 데이터 플랫폼 구축 현황', source:'디지털데일리', published:'2024-10-18', url:'#', content:'서울대학교병원, 세브란스병원 등 대형 의료기관들이 의료 데이터 통합 플랫폼을 구축하고 AI 진단 보조 시스템을 도입하고 있다. AI의 암 조기 발견율이 전문의 수준에 도달했으며, 진단 시간이 평균 60% 단축됐다. 정부는 의료 AI 산업 육성을 위해 2026년까지 5천억 원 규모의 예산을 투입한다.'},
+  {title:'스마트 물류 혁신: 자율주행 AMR 로봇과 AI 배송 최적화', source:'IT조선', published:'2024-10-17', url:'#', content:'CJ대한통운, 롯데글로벌로지스 등 국내 주요 물류 기업들이 자율주행 로봇(AMR)을 도입하여 물류 센터 처리 효율을 40% 이상 향상시켰다. AI 기반 배송 경로 최적화 시스템으로 배송 시간 25%, 연료비 18%가 절감됐으며, 2025년까지 전국 주요 물류 센터의 80%에 스마트 자동화 시스템을 도입할 계획이다.'},
+  {title:'금융 마이데이터 서비스 고도화: 맞춤형 AI 재무 컨설팅 시대', source:'전자신문', published:'2024-10-16', url:'#', content:'금융위원회의 마이데이터 정책 고도화에 따라 국내 핀테크 기업과 은행들이 개인 맞춤형 금융 서비스 경쟁을 벌이고 있다. 사용자의 소비 패턴과 금융 데이터를 AI로 분석해 최적의 금융 상품을 추천하는 서비스 가입자가 2,000만 명을 돌파했다. 카카오페이, 토스 등 핀테크 기업들은 AI 재무 코치 서비스를 출시하여 개인 자산 관리 시장을 확대하고 있다.'},
+  {title:'ESG 경영과 IT 융합: 탄소 중립 디지털 전환 전략', source:'NIPA 공지', published:'2024-10-15', url:'#', content:'환경부와 산업통상자원부가 추진하는 그린 IT 정책에 따라 기업들의 탄소 배출량 디지털 모니터링 시스템 도입이 의무화될 전망이다. IoT 센서와 AI 분석을 결합한 탄소 관리 플랫폼 시장이 연평균 28% 성장 중이며, 네이버, 카카오, SKT 등 주요 IT 기업들이 2040년 탄소 중립을 선언했다.'},
+  {title:'5G 특화망 기반 스마트 팩토리 전국 확산', source:'보안뉴스', published:'2024-10-14', url:'#', content:'5G 특화망을 활용한 스마트 팩토리 구축이 국내 제조업 전반으로 확산되고 있다. 초저지연 통신 기반의 실시간 품질 검사 시스템과 AR 작업자 지원 시스템 도입으로 불량률이 60% 이상 감소했다. 과기정통부는 2025년까지 제조 중소기업 5만 개에 스마트 팩토리 도입을 지원하는 K-스마트팩토리 사업을 추진 중이다.'},
+  {title:'RPA+AI 결합 IPA 솔루션, 국내 기업 업무 자동화 선도', source:'IT조선', published:'2024-10-13', url:'#', content:'RPA와 AI를 결합한 IPA(인텔리전트 프로세스 자동화) 솔루션이 국내 금융, 보험, 제조 업계에 빠르게 확산되고 있다. 단순 반복 업무 자동화를 넘어 비정형 데이터 처리와 예외 처리까지 가능해지면서 백오피스 효율화 효과가 극대화됐다. 도입 기업의 평균 업무 처리 시간이 65% 단축되고 오류율이 99% 감소했다.'},
+];
+
+/* ───────────────── NAVIGATION ───────────────── */
+function nav(view) {
+  document.querySelectorAll('.view').forEach(v => { v.style.display = 'none'; });
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  const el = document.getElementById('view-' + view);
+  if (!el) return;
+  if (view === 'results') {
+    el.style.display = 'flex';
+  } else if (view === 'generate') {
+    el.style.display = 'flex';
+  } else {
+    el.style.display = 'flex';
+    el.style.flexDirection = 'column';
+  }
+
+  const navEl = document.getElementById('nav-' + view);
+  if (navEl) navEl.classList.add('active');
+  S.view = view;
+
+  syncCounts();
+  if (view === 'collect')  { renderSrcCards(); renderHist(); renderDocList(); }
+  if (view === 'generate') { checkDocWarn(); }
+}
+
+/* ───────────────── API KEY ───────────────── */
+async function validateKey() {
+  const key = document.getElementById('sb-key').value.trim();
+  const msg = document.getElementById('sb-key-msg');
+
+  if (!key)           return showMsg(msg, '❌ API 키를 입력해주세요.', 'err');
+  if (!key.startsWith('sk-')) return showMsg(msg, '❌ 올바른 형식이 아닙니다 (sk-...).', 'err');
+
+  showMsg(msg, '⏳ 검증 중...', 'info');
+  try {
+    const r = await fetch('https://api.openai.com/v1/models', {
+      headers: { Authorization: 'Bearer ' + key }
+    });
+    if (r.ok) {
+      S.apiKey = key; S.apiOk = true;
+      showMsg(msg, '✅ 검증 완료! 모든 기능이 활성화되었습니다.', 'ok');
+      setApiUi(true);
+    } else {
+      const e = await r.json();
+      showMsg(msg, '❌ ' + (e.error?.message || '인증 실패'), 'err');
+      setApiUi(false);
+    }
+  } catch(e) {
+    showMsg(msg, '❌ 네트워크 오류: ' + e.message, 'err');
+    setApiUi(false);
+  }
+}
+
+function showMsg(el, txt, type) {
+  el.classList.remove('hidden');
+  el.textContent = txt;
+  el.className = 'mt-2 text-caption ' +
+    (type==='err'?'text-red-600': type==='ok'?'text-green-600':'text-on-surface-variant');
+}
+
+function setApiUi(ok) {
+  const badge    = document.getElementById('api-badge');
+  const sbStatus = document.getElementById('sb-api-status');
+  const hBadge   = document.getElementById('home-api-badge');
+  const hIcon    = document.getElementById('home-api-icon');
+  const hTitle   = document.getElementById('home-api-title');
+  const hDesc    = document.getElementById('home-api-desc');
+
+  if (ok) {
+    badge.style.display = 'flex';
+    sbStatus.textContent = 'GPT-4o mini 연동 중';
+    sbStatus.className   = 'text-caption text-green-600 truncate';
+    hBadge.className = 'flex items-center gap-1.5 px-2.5 py-1 bg-green-50 text-green-700 text-caption font-bold rounded-full border border-green-100';
+    hBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-green-500 pulse"></span> CONNECTED';
+    hIcon.className  = 'w-16 h-16 rounded-full bg-green-50 flex items-center justify-center';
+    hIcon.innerHTML  = '<span class="material-symbols-outlined text-green-500" style="font-size:32px;">check_circle</span>';
+    hTitle.textContent = 'GPT-4o mini 분석 활성화됨';
+    hDesc.innerHTML = '현재 API 키가 성공적으로 인증되었습니다.<br/>데이터 수집 후 기획안을 생성하세요.';
+  } else {
+    badge.style.display = 'none';
+    sbStatus.textContent = 'API 키 미입력';
+    sbStatus.className   = 'text-caption text-outline truncate';
+  }
+}
+
+/* ───────────────── COUNT SYNC ───────────────── */
+function syncCounts() {
+  const dc = S.docs.length.toLocaleString();
+  setText('sb-doc-cnt',    dc + '개');
+  setText('c-doc-cnt',     dc);
+  setText('home-doc-cnt',  dc + '개');
+  setText('home-plan-cnt', S.planCnt + '개');
+}
+function setText(id, v) { const e = document.getElementById(id); if(e) e.textContent = v; }
+
+/* ───────────────── SOURCE CARDS ───────────────── */
+function renderSrcCards() {
+  const g = document.getElementById('src-grid');
+  if (!g) return;
+  g.innerHTML = Object.entries(SOURCES).map(([name, url]) => `
+    <div class="src-card bg-white border border-border-subtle p-4 rounded-lg cursor-pointer group" id="sc-${esc(name)}">
+      <div class="flex justify-between items-start mb-3">
+        <div class="bg-surface-gray p-2 rounded-lg text-hansol-blue">
+          <span class="material-symbols-outlined">${SRC_ICONS[name]||'rss_feed'}</span>
+        </div>
+        <input type="checkbox" checked class="rounded border-border-subtle text-hansol-blue focus:ring-hansol-blue"/>
+      </div>
+      <h3 class="font-label-md text-label-md text-text-primary font-bold group-hover:text-hansol-blue transition-colors">${name}</h3>
+      <p class="text-caption text-text-secondary mt-1 truncate">${url}</p>
+    </div>`).join('');
+}
+function esc(s) { return s.replace(/\s/g,'_'); }
+
+/* ───────────────── HISTORY TABLE ───────────────── */
+function renderHist() {
+  const tbody = document.getElementById('c-hist-body');
+  if (!tbody) return;
+
+  /* 마지막 수집 일시 */
+  const lastDtEl = document.getElementById('c-last-dt');
+  if (lastDtEl) lastDtEl.textContent = S.hist.length ? S.hist[0].dt : '—';
+
+  /* 이력 건수 뱃지 */
+  const badge = document.getElementById('c-hist-badge');
+  if (badge) badge.textContent = S.hist.length ? `총 ${S.hist.length}건` : '';
+
+  if (!S.hist.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-10 text-center text-caption text-on-surface-variant">수집 이력이 없습니다.<br/>위 수집 시작 버튼을 눌러주세요.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = S.hist.map(h => `
+    <tr class="hover:bg-[#F0F7FF] transition-colors">
+      <td class="px-5 py-4 text-caption text-text-secondary whitespace-nowrap">${h.dt}</td>
+      <td class="px-5 py-4 font-label-md text-label-md text-text-primary">${h.sources}</td>
+      <td class="px-5 py-4 text-caption">${h.kw||'전체'}</td>
+      <td class="px-5 py-4 font-label-md text-label-md text-center font-bold text-hansol-blue">${h.cnt}</td>
+      <td class="px-5 py-4 text-right">
+        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-[10px] font-bold uppercase">${h.status}</span>
+      </td>
+    </tr>`).join('');
+}
+
+function clearAllDocs() {
+  if (!confirm('저장된 모든 문서와 이력을 삭제하시겠습니까?')) return;
+  S.docs = []; S.hist = [];
+  S.selSet = new Set(); S.selectedDocs = [];
+  localStorage.removeItem('rag_docs');
+  localStorage.removeItem('rag_hist');
+  syncCounts();
+  renderHist();
+  renderDocList();
+}
+
+/* ───────────────── DOCUMENT LIST ───────────────── */
+const DL = { page: 0, pageSize: 15, filtered: [] };
+
+function escHtml(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderDocList() {
+  const tbody = document.getElementById('dl-tbody');
+  if (!tbody) return;
+
+  /* Rebuild source dropdown (preserve current selection) */
+  const srcSel = document.getElementById('dl-src');
+  if (srcSel) {
+    const prev = srcSel.value;
+    const srcs = [...new Set(S.docs.map(d => d.source))].sort();
+    srcSel.innerHTML = '<option value="">전체 소스</option>' +
+      srcs.map(s => `<option value="${escHtml(s)}"${s===prev?' selected':''}>${escHtml(s)}</option>`).join('');
+  }
+
+  /* Filter */
+  const kw  = (document.getElementById('dl-kw')?.value || '').toLowerCase().trim();
+  const src = document.getElementById('dl-src')?.value || '';
+  DL.filtered = S.docs.filter(d => {
+    if (src && d.source !== src) return false;
+    if (kw  && !(d.title + ' ' + (d.content||'')).toLowerCase().includes(kw)) return false;
+    return true;
+  });
+
+  const total = DL.filtered.length;
+  const pages = Math.max(1, Math.ceil(total / DL.pageSize));
+  DL.page     = Math.min(DL.page, pages - 1);
+  const start = DL.page * DL.pageSize;
+  const slice = DL.filtered.slice(start, start + DL.pageSize);
+
+  /* Count label */
+  const totalEl = document.getElementById('dl-total-cnt');
+  if (totalEl) {
+    totalEl.textContent = S.docs.length
+      ? (kw || src ? `${total}개 (검색결과) / 전체 ${S.docs.length}개` : `전체 ${S.docs.length}개`)
+      : '';
+  }
+
+  /* Empty state */
+  if (!S.docs.length) {
+    tbody.innerHTML = '<tr><td colspan="4" class="px-5 py-10 text-center text-caption text-on-surface-variant">수집된 문서가 없습니다.<br/>위 수집 시작 버튼을 눌러주세요.</td></tr>';
+    _dlHidePagi(); _dlUpdateSel(); return;
+  }
+  if (!slice.length) {
+    tbody.innerHTML = '<tr><td colspan="4" class="px-5 py-10 text-center text-caption text-on-surface-variant">검색 결과가 없습니다.</td></tr>';
+    _dlHidePagi(); _dlUpdateSel(); return;
+  }
+
+  /* Rows */
+  tbody.innerHTML = slice.map(d => {
+    const ri  = S.docs.indexOf(d);
+    const chk = S.selSet.has(ri) ? 'checked' : '';
+    const ico = SRC_ICONS[d.source] || 'article';
+    const dt  = (d.published || '').replace(/T.*/, '').slice(0, 10);
+    const selBg = S.selSet.has(ri) ? 'bg-blue-50/60' : '';
+    return `<tr class="hover:bg-[#F0F7FF] transition-colors cursor-pointer ${selBg}" onclick="openArtModal(${ri})">
+      <td class="w-10 px-4 py-3" onclick="event.stopPropagation()">
+        <input type="checkbox" ${chk} onchange="toggleDoc(${ri})" class="rounded border-border-subtle text-hansol-blue focus:ring-hansol-blue"/>
+      </td>
+      <td class="px-5 py-3 max-w-0">
+        <div class="font-label-md text-label-md text-text-primary truncate">${escHtml(d.title)}</div>
+        <div class="text-caption text-on-surface-variant truncate mt-0.5">${escHtml((d.content||'').slice(0,120))}</div>
+      </td>
+      <td class="px-5 py-3 whitespace-nowrap">
+        <span class="flex items-center gap-1 text-caption text-hansol-blue font-bold">
+          <span class="material-symbols-outlined" style="font-size:13px;">${ico}</span>${escHtml(d.source)}
+        </span>
+      </td>
+      <td class="px-5 py-3 text-caption text-on-surface-variant whitespace-nowrap">${escHtml(dt)}</td>
+    </tr>`;
+  }).join('');
+
+  _dlRenderPagi(pages);
+  _dlUpdateSel();
+}
+
+function _dlHidePagi() {
+  const p = document.getElementById('dl-pagination');
+  if (p) p.classList.add('hidden');
+}
+
+function _dlRenderPagi(pages) {
+  const pagi = document.getElementById('dl-pagination');
+  if (!pagi) return;
+  if (pages <= 1) { _dlHidePagi(); return; }
+  pagi.style.display = 'flex';
+
+  const pi = document.getElementById('dl-page-info');
+  if (pi) pi.textContent = `${DL.page + 1} / ${pages} 페이지`;
+
+  const pb = document.getElementById('dl-prev-btn');
+  const nb = document.getElementById('dl-next-btn');
+  if (pb) pb.disabled = DL.page === 0;
+  if (nb) nb.disabled = DL.page >= pages - 1;
+
+  const bts = document.getElementById('dl-page-btns');
+  if (bts) {
+    const s = Math.max(0, DL.page - 2);
+    const e = Math.min(pages, s + 5);
+    bts.innerHTML = Array.from({length: e - s}, (_, i) => {
+      const p = s + i;
+      const cls = p === DL.page
+        ? 'bg-hansol-blue text-white border-hansol-blue'
+        : 'bg-white text-on-surface-variant hover:bg-surface-gray';
+      return `<button onclick="dlGoPage(${p})" class="w-8 h-8 rounded-lg border border-border-subtle text-sm transition-all ${cls}">${p+1}</button>`;
+    }).join('');
+  }
+}
+
+function _dlUpdateSel() {
+  const cnt = S.selSet.size;
+
+  const cntEl   = document.getElementById('dl-sel-cnt');
+  const clearEl = document.getElementById('dl-clear-btn');
+  const btn     = document.getElementById('dl-gen-btn');
+  const allCb   = document.getElementById('dl-all-cb');
+
+  if (cntEl)   { cntEl.textContent = cnt + '개 선택됨'; cntEl.classList.toggle('hidden', cnt === 0); }
+  if (clearEl)   clearEl.classList.toggle('hidden', cnt === 0);
+  if (btn)       btn.disabled = cnt === 0;
+  if (allCb) {
+    const idxs  = DL.filtered.map(d => S.docs.indexOf(d)).filter(i => i >= 0);
+    const allOn = idxs.length > 0 && idxs.every(i => S.selSet.has(i));
+    allCb.checked       = allOn;
+    allCb.indeterminate = !allOn && idxs.some(i => S.selSet.has(i));
+  }
+}
+
+function toggleDoc(ri) {
+  if (S.selSet.has(ri)) S.selSet.delete(ri); else S.selSet.add(ri);
+  renderDocList();
+}
+
+function toggleSelectAll() {
+  const cb = document.getElementById('dl-all-cb');
+  DL.filtered.forEach(d => {
+    const i = S.docs.indexOf(d);
+    if (i < 0) return;
+    if (cb.checked) S.selSet.add(i); else S.selSet.delete(i);
+  });
+  renderDocList();
+}
+
+function clearDocSelection() {
+  S.selSet = new Set();
+  renderDocList();
+}
+
+function dlPrev()    { if (DL.page > 0) { DL.page--; renderDocList(); } }
+function dlNext()    { const p = Math.ceil(DL.filtered.length / DL.pageSize); if (DL.page < p-1) { DL.page++; renderDocList(); } }
+function dlGoPage(p) { DL.page = p; renderDocList(); }
+
+function goGenerateWithSelected() {
+  if (!S.selSet.size) return;
+  S.selectedDocs = [...S.selSet].map(i => S.docs[i]).filter(Boolean);
+  nav('generate');
+  /* Show badge */
+  const badge  = document.getElementById('g-sel-badge');
+  const cntEl  = document.getElementById('g-sel-cnt');
+  const gWarn  = document.getElementById('g-warn');
+  if (badge)  { badge.classList.remove('hidden'); }
+  if (cntEl)  { cntEl.textContent = S.selectedDocs.length; }
+  if (gWarn)  { gWarn.classList.add('hidden'); }
+}
+
+function clearSelectedDocs() {
+  S.selectedDocs = [];
+  S.selSet = new Set();
+  const badge = document.getElementById('g-sel-badge');
+  if (badge) badge.classList.add('hidden');
+  checkDocWarn();
+  renderDocList();
+}
+
+/* ───────────────── ARTICLE DETAIL MODAL ───────────────── */
+let _artDocIdx = -1;
+
+function openArtModal(ri) {
+  _artDocIdx = ri;
+  _renderArtModal();
+  document.getElementById('art-modal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeArtModal() {
+  document.getElementById('art-modal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+function _renderArtModal() {
+  const d = S.docs[_artDocIdx];
+  if (!d) return;
+
+  /* 제목 */
+  document.getElementById('art-title').textContent = d.title || '';
+
+  /* 날짜 */
+  document.getElementById('art-date').textContent =
+    (d.published || '').replace(/T.*/, '').slice(0, 10);
+
+  /* 소스 뱃지 */
+  const ico = SRC_ICONS[d.source] || 'article';
+  document.getElementById('art-source-badge').innerHTML =
+    `<span class="material-symbols-outlined" style="font-size:12px;">${ico}</span>${escHtml(d.source)}`;
+
+  /* 원문 링크 */
+  const link = document.getElementById('art-link');
+  const hasUrl = d.url && d.url !== '#';
+  link.href = hasUrl ? d.url : '#';
+  link.style.display = hasUrl ? '' : 'none';
+
+  /* 본문 */
+  const body = (d.content || '').trim();
+  document.getElementById('art-content').textContent = body;
+  document.getElementById('art-no-content').classList.toggle('hidden', !!body);
+
+  /* 이전/다음 네비게이션 (DL.filtered 기준) */
+  const filtPos   = DL.filtered.findIndex(fd => S.docs.indexOf(fd) === _artDocIdx);
+  const filtTotal = DL.filtered.length;
+  const navInfo   = document.getElementById('art-nav-info');
+  const prevBtn   = document.getElementById('art-prev-btn');
+  const nextBtn   = document.getElementById('art-next-btn');
+  if (filtPos >= 0) {
+    if (navInfo) navInfo.textContent = `${filtPos + 1} / ${filtTotal}`;
+    if (prevBtn) prevBtn.disabled = filtPos === 0;
+    if (nextBtn) nextBtn.disabled = filtPos >= filtTotal - 1;
+  } else {
+    if (navInfo) navInfo.textContent = '';
+    if (prevBtn) prevBtn.disabled = true;
+    if (nextBtn) nextBtn.disabled = true;
+  }
+
+  /* 선택 버튼 */
+  const selected  = S.selSet.has(_artDocIdx);
+  const selBtn    = document.getElementById('art-sel-btn');
+  const selIcon   = document.getElementById('art-sel-icon');
+  const selLabel  = document.getElementById('art-sel-label');
+  if (selected) {
+    selBtn.className  = 'flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-bold transition-all bg-hansol-blue text-white hover:bg-primary';
+    selIcon.textContent = 'check_box';
+    selLabel.textContent = '선택됨 (해제하려면 클릭)';
+  } else {
+    selBtn.className  = 'flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-bold transition-all border border-hansol-blue text-hansol-blue hover:bg-blue-50';
+    selIcon.textContent = 'check_box_outline_blank';
+    selLabel.textContent = '기획안 참고자료로 선택';
+  }
+}
+
+function artNavPrev() {
+  const pos = DL.filtered.findIndex(fd => S.docs.indexOf(fd) === _artDocIdx);
+  if (pos > 0) { _artDocIdx = S.docs.indexOf(DL.filtered[pos - 1]); _renderArtModal(); }
+}
+
+function artNavNext() {
+  const pos = DL.filtered.findIndex(fd => S.docs.indexOf(fd) === _artDocIdx);
+  if (pos >= 0 && pos < DL.filtered.length - 1) { _artDocIdx = S.docs.indexOf(DL.filtered[pos + 1]); _renderArtModal(); }
+}
+
+function artToggleSel() {
+  if (S.selSet.has(_artDocIdx)) S.selSet.delete(_artDocIdx); else S.selSet.add(_artDocIdx);
+  _renderArtModal();
+  renderDocList();
+}
+
+/* ───────────────── COLLECTION ───────────────── */
+async function startCollect() {
+
+  const kw   = document.getElementById('c-kw').value.trim();
+  const maxN = parseInt(document.getElementById('c-max').value);
+  const btn  = document.getElementById('c-btn');
+  const prog = document.getElementById('c-prog-area');
+  const log  = document.getElementById('c-log');
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="material-symbols-outlined spin">sync</span> 수집 중...';
+  prog.classList.remove('hidden');
+  log.innerHTML = '';
+
+  const names = Object.keys(SOURCES);
+  let collected = [];
+
+  for (let i = 0; i < names.length; i++) {
+    const name = names[i];
+    setProg(Math.round(i / names.length * 80), name + ' 수집 중...');
+    addLog('▶ ' + name + ' 피드 수집...');
+    const card = document.getElementById('sc-' + esc(name));
+    if (card) card.classList.add('live');
+
+    try {
+      const arts = await fetchRSS(name, SOURCES[name], maxN);
+      collected = collected.concat(arts);
+      addLog('  ✓ 실제 기사 ' + arts.length + '개 수집 완료');
+    } catch(e) {
+      addLog('  ✗ 실시간 수집 실패 → 내장 샘플 사용');
+      const fallback = MOCK.filter(m => m.source === name).slice(0, maxN);
+      collected = collected.concat(fallback);
+      addLog('  ↩ 샘플 ' + fallback.length + '개 추가');
+    }
+    await sleep(300);
+  }
+
+  setProg(88, '중복 제거 및 처리 중...');
+  addLog('\n총 수집: ' + collected.length + '개');
+
+  /* Keyword filter */
+  const kws = kw ? kw.split(',').map(k => k.trim().toLowerCase()).filter(Boolean) : [];
+  let filtered = kws.length
+    ? collected.filter(d => kws.some(k => (d.title+d.content).toLowerCase().includes(k)))
+    : collected;
+  if (filtered.length < 3) filtered = collected;
+
+  /* De-duplicate */
+  const seen = new Set();
+  const uniq = filtered.filter(d => {
+    if (seen.has(d.title)) return false;
+    seen.add(d.title); return true;
+  });
+
+  const before = S.docs.length;
+  S.docs = [...S.docs, ...uniq].slice(-500);
+  localStorage.setItem('rag_docs', JSON.stringify(S.docs));
+  const added = S.docs.length - before;
+
+  setProg(100, '✅ 수집 완료!');
+  addLog('✅ 신규 ' + added + '개 저장 (총 ' + S.docs.length + '개)');
+
+  /* History */
+  const entry = {
+    dt: new Date().toLocaleString('ko-KR',{year:'2-digit',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}),
+    sources: names.slice(0,3).join(', ') + (names.length>3?'...':''),
+    kw: kw||'',
+    cnt: added,
+    status: 'Completed',
+  };
+  S.hist.unshift(entry);
+  if (S.hist.length > 20) S.hist.pop();
+  localStorage.setItem('rag_hist', JSON.stringify(S.hist));
+
+  syncCounts();
+  renderHist();
+  DL.page = 0;
+  renderDocList();
+
+  /* 이력 섹션이 보이도록 스크롤 */
+  setTimeout(() => {
+    const histSec = document.getElementById('c-hist-section');
+    if (histSec) histSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
+
+  setTimeout(() => {
+    document.querySelectorAll('.src-card').forEach(c => c.classList.remove('live'));
+    btn.disabled = false;
+    btn.innerHTML = '<span class="material-symbols-outlined icon-fill">play_arrow</span> 수집 시작';
+  }, 1500);
+}
+
+async function fetchRSS(name, url, maxN) {
+  /* 프록시 3종 순서대로 시도:
+     1. allorigins /raw  — 원본 XML 반환 (구버전 /get 보다 null 반환 빈도 낮음)
+     2. corsproxy.io     — 원본 XML 반환
+     3. rss2json.com     — 서버 사이드 파싱 JSON 반환 (가장 안정적) */
+  const proxies = [
+    { url: 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url), type: 'xml' },
+    { url: 'https://corsproxy.io/?' + encodeURIComponent(url),              type: 'xml' },
+    { url: 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(url) + '&count=' + maxN, type: 'rss2json' },
+  ];
+
+  for (const p of proxies) {
+    try {
+      const ctrl  = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 12000);
+      let items;
+      try {
+        const r = await fetch(p.url, { signal: ctrl.signal });
+        clearTimeout(timer);
+        if (!r.ok) continue;
+
+        if (p.type === 'rss2json') {
+          /* rss2json: 이미 파싱된 JSON */
+          const json = await r.json();
+          if (json.status !== 'ok' || !json.items?.length) continue;
+          items = json.items.slice(0, maxN).map(item => ({
+            title:     (item.title || '').trim(),
+            url:       item.link || '#',
+            published: (item.pubDate || '').split(' ')[0] || new Date().toISOString().split('T')[0],
+            content:   (item.description || item.content || '').replace(/<[^>]*>/g,'').slice(0, 400),
+            source:    name,
+          })).filter(a => a.title);
+        } else {
+          /* XML 프록시: 직접 파싱 */
+          const content = await r.text();
+          if (!content || content.length < 100) continue;
+          const xml = new DOMParser().parseFromString(content, 'text/xml');
+          if (xml.querySelector('parsererror')) continue;
+          items = Array.from(xml.querySelectorAll('item')).slice(0, maxN).map(item => ({
+            title:     cdata(item.querySelector('title')?.textContent),
+            url:       item.querySelector('link')?.textContent?.trim() || '#',
+            published: item.querySelector('pubDate')?.textContent?.trim() || new Date().toISOString().split('T')[0],
+            content:   cdata(item.querySelector('description')?.textContent).replace(/<[^>]*>/g,'').slice(0, 400),
+            source:    name,
+          })).filter(a => a.title);
+        }
+      } catch { clearTimeout(timer); continue; }
+
+      if (items && items.length > 0) return items;  /* 성공 */
+    } catch { continue; }
+  }
+  throw new Error('모든 프록시 실패');
+}
+
+function cdata(s) {
+  return (s||'').replace(/<!\[CDATA\[/g,'').replace(/\]\]>/g,'').trim();
+}
+
+function setProg(pct, label) {
+  document.getElementById('c-prog-bar').style.width   = pct + '%';
+  document.getElementById('c-prog-pct').textContent   = pct + '%';
+  document.getElementById('c-prog-label').textContent = label;
+}
+
+function addLog(msg) {
+  const log = document.getElementById('c-log');
+  const d = document.createElement('div');
+  d.textContent = msg;
+  d.className   = 'text-caption text-on-surface-variant';
+  log.appendChild(d);
+  log.scrollTop = log.scrollHeight;
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function checkDocWarn() {
+  const w = document.getElementById('g-warn');
+  if (w) w.classList.toggle('hidden', S.docs.length > 0);
+}
+
+/* ───────────────── SEARCH (keyword TF-IDF) ───────────────── */
+function search(query, topK = 5) {
+  if (!S.docs.length) return [];
+  const words = query.toLowerCase().split(/[\s,]+/).filter(w => w.length > 1);
+  const scored = S.docs.map(doc => {
+    const text = (doc.title + ' ' + doc.content).toLowerCase();
+    const score = words.reduce((s, w) => s + (text.match(new RegExp(w,'g'))||[]).length, 0);
+    return { ...doc, score };
+  });
+  const any = scored.some(d => d.score > 0);
+  return (any ? scored.filter(d=>d.score>0) : scored)
+    .sort((a,b) => b.score - a.score).slice(0, topK);
+}
+
+/* ───────────────── PLAN GENERATION ───────────────── */
+async function generatePlan() {
+  const query    = document.getElementById('g-query').value.trim();
+  const industry = document.getElementById('g-industry').value;
+  const scale    = document.getElementById('g-scale').value;
+
+  if (!query)  { alert('기획 주제를 입력해주세요.'); return; }
+  if (!S.apiOk){ alert('먼저 OpenAI API 키를 입력하고 검증해주세요.'); return; }
+
+  const full = `[${industry} | ${scale}] ${query}`;
+  /* Use hand-picked docs from collect view if available, else keyword search */
+  if (S.selectedDocs && S.selectedDocs.length > 0) {
+    S.refs = S.selectedDocs.slice(0, 8);
+  } else {
+    S.refs = search(full, 5);
+  }
+
+  nav('results');
+
+  const rEmpty   = document.getElementById('r-empty');
+  const rContent = document.getElementById('r-content');
+  const rFb      = document.getElementById('r-feedback');
+
+  rEmpty.classList.add('hidden');
+  rContent.classList.remove('hidden');
+  rContent.innerHTML = '<div class="flex items-center gap-3 text-on-surface-variant py-10"><span class="material-symbols-outlined spin">sync</span> GPT-4o mini가 기획안을 작성하는 중...</div>';
+  rFb.classList.add('hidden');
+
+  renderRefs(S.refs);
+
+  const ctx = S.refs.length
+    ? S.refs.map((d,i) => `[참고자료 ${i+1}] 출처: ${d.source} | 제목: ${d.title} | 날짜: ${d.published}\n${d.content||d.title}`).join('\n---\n')
+    : '(수집된 참고자료 없음 — 일반 지식 기반으로 생성)';
+
+  const SYS = `당신은 국내 IT 기술 트렌드에 정통한 시니어 IT 기획자입니다.
+주어진 참고자료(국내 최신 IT 뉴스)를 바탕으로, 실무에서 바로 활용 가능한 IT 기획안 초안을 작성합니다.
+
+## 기획안 작성 원칙
+1. 국내 시장 상황과 도입 사례를 반드시 반영합니다.
+2. 추상적 표현 대신 구체적 수치, 기술명, 업체명을 사용합니다.
+3. 아래 필수 구조를 따릅니다.
+4. 경영진과 실무진 모두 이해할 수 있는 언어로 작성합니다.
+
+## 기획안 필수 구조
+# [기획안 제목]
+
+## 1. 배경 및 현황
+- 국내외 시장 동향 (수치 포함)
+- 도입 필요성
+
+## 2. 목표 및 범위
+- 정량적 목표 (KPI)
+- 프로젝트 범위
+
+## 3. 기술 전략 및 아키텍처
+- 핵심 기술 스택
+- 국내 도입 사례 참고
+
+## 4. 추진 로드맵
+- Phase별 일정 (월 단위)
+
+## 5. 예산 계획 (개략)
+- 항목별 예산 추정
+
+## 6. 기대효과 및 리스크
+- 정량적 기대효과
+- 주요 리스크 & 대응방안
+
+## 7. 참고자료
+- 활용한 출처 목록`;
+
+  const USR = `다음 주제에 대한 IT 기획안 초안을 작성해주세요.
+
+## 기획 주제
+${full}
+
+## 참고자료 (국내 최신 IT 동향)
+${ctx}
+
+위 참고자료를 최대한 활용하여 실무적이고 구체적인 기획안을 작성해주세요.
+참고자료의 출처(언론사명, 날짜)를 기획안 마지막 참고자료 섹션에 명시하세요.`;
+
+  try {
+    const r = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + S.apiKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [{role:'system', content:SYS}, {role:'user', content:USR}],
+        max_tokens: 4096,
+        temperature: 0.7,
+        stream: true,
+      }),
+    });
+
+    if (!r.ok) {
+      const e = await r.json();
+      throw new Error(e.error?.message || '생성 실패');
+    }
+
+    let full_plan = '';
+    rContent.innerHTML = '';
+
+    const reader  = r.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value, { stream: true });
+      for (const line of chunk.split('\n')) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6);
+        if (raw === '[DONE]') break;
+        try {
+          const tok = JSON.parse(raw).choices?.[0]?.delta?.content;
+          if (tok) {
+            full_plan += tok;
+            rContent.innerHTML = marked.parse(full_plan) +
+              '<span style="animation:pulse 0.8s infinite;color:#005CAB;font-size:1.1em;">▌</span>';
+          }
+        } catch {}
+      }
+    }
+
+    rContent.innerHTML = marked.parse(full_plan);
+    S.plan = full_plan;
+    S.planCnt++;
+    localStorage.setItem('plan_cnt', S.planCnt.toString());
+    rFb.classList.remove('hidden');
+    syncCounts();
+
+  } catch(e) {
+    rContent.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-lg p-5 text-red-700">
+      <strong>오류 발생:</strong> ${e.message}
+    </div>`;
+  }
+}
+
+/* ───────────────── REFERENCE PANEL ───────────────── */
+function renderRefs(docs) {
+  const list  = document.getElementById('ref-list');
+  const badge = document.getElementById('ref-badge');
+  if (badge) badge.textContent = docs.length + ' Sources';
+  if (!list) return;
+
+  if (!docs.length) {
+    list.innerHTML = '<p class="text-caption text-outline">수집된 문서가 없어 일반 지식으로 생성합니다.</p>';
+    return;
+  }
+
+  list.innerHTML = docs.map(d => `
+    <div class="bg-white p-3 rounded-xl border border-border-subtle hover:border-hansol-blue transition-colors cursor-pointer group fade-in">
+      <div class="flex items-start justify-between mb-1.5">
+        <span class="material-symbols-outlined text-hansol-blue" style="font-size:18px;">${SRC_ICONS[d.source]||'article'}</span>
+        <span class="text-caption text-outline">${(d.published||'').split('T')[0]}</span>
+      </div>
+      <h5 class="font-label-md text-label-md text-on-surface font-bold mb-1 group-hover:text-hansol-blue transition-colors" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${d.title}</h5>
+      <p class="text-caption text-on-surface-variant" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${(d.content||'').slice(0,90)}…</p>
+      <div class="mt-1.5 text-caption text-hansol-blue font-bold">${d.source}</div>
+    </div>`).join('');
+}
+
+/* ───────────────── DOWNLOAD ───────────────── */
+function dlMd() {
+  if (!S.plan) { alert('생성된 기획안이 없습니다.'); return; }
+  const blob = new Blob([S.plan], { type:'text/markdown;charset=utf-8' });
+  triggerDl(blob, 'IT기획안.md');
+}
+
+async function dlDocx() {
+  if (!S.plan) { alert('생성된 기획안이 없습니다.'); return; }
+
+  /* Try docx library first */
+  if (window.docx) {
+    try {
+      const { Document, Packer, Paragraph, HeadingLevel, TextRun } = window.docx;
+      const children = [];
+
+      for (const line of S.plan.split('\n')) {
+        const t = line.trim();
+        if (!t) { children.push(new Paragraph('')); continue; }
+        if (t.startsWith('# '))   { children.push(new Paragraph({text:t.slice(2),  heading:HeadingLevel.HEADING_1})); continue; }
+        if (t.startsWith('## '))  { children.push(new Paragraph({text:t.slice(3),  heading:HeadingLevel.HEADING_2})); continue; }
+        if (t.startsWith('### ')) { children.push(new Paragraph({text:t.slice(4),  heading:HeadingLevel.HEADING_3})); continue; }
+        if (t.startsWith('- ') || t.startsWith('* ')) {
+          children.push(new Paragraph({text:t.slice(2), bullet:{level:0}})); continue;
+        }
+        if (/^\d+\.\s/.test(t)) { children.push(new Paragraph({text:t.replace(/^\d+\.\s/,'')})); continue; }
+        children.push(new Paragraph(t));
+      }
+
+      const doc  = new Document({ sections:[{children}] });
+      const blob = await Packer.toBlob(doc);
+      triggerDl(blob, 'IT기획안.docx');
+      return;
+    } catch(e) { console.warn('docx lib failed, using HTML fallback', e); }
+  }
+
+  /* Fallback: HTML disguised as .doc */
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8">
+<style>body{font-family:'Malgun Gothic',sans-serif;max-width:800px;margin:40px auto;padding:0 24px;}
+h1{color:#004482;font-size:1.5rem;}h2{color:#1A1A1A;border-left:4px solid #005CAB;padding-left:12px;}
+p,li{line-height:1.8;color:#414751;}</style></head>
+<body>${marked.parse(S.plan)}</body></html>`;
+  triggerDl(new Blob([html], {type:'application/msword;charset=utf-8'}), 'IT기획안.doc');
+}
+
+function triggerDl(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const a   = Object.assign(document.createElement('a'), {href:url, download:name});
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ───────────────── FEEDBACK ───────────────── */
+function updateFbLabel(val) {
+  const icons = [
+    [30,'sentiment_dissatisfied','부족함'],
+    [60,'sentiment_neutral','보통'],
+    [85,'sentiment_satisfied','만족'],
+    [101,'sentiment_very_satisfied','매우 만족'],
+  ];
+  const [,icon,text] = icons.find(([max]) => val < max);
+  document.getElementById('fb-label').innerHTML =
+    `<span class="material-symbols-outlined" style="font-size:18px;">${icon}</span> ${text}`;
+}
+
+function submitFeedback() {
+  const rating = document.getElementById('fb-slider').value;
+  const text   = document.getElementById('fb-text').value;
+  const fbs    = JSON.parse(localStorage.getItem('feedbacks')||'[]');
+  fbs.push({ rating, text, dt: new Date().toISOString() });
+  localStorage.setItem('feedbacks', JSON.stringify(fbs));
+  document.getElementById('fb-text').value = '';
+  alert('피드백이 저장되었습니다. 감사합니다!');
+}
+
+/* ───────────────── INIT ───────────────── */
+function init() {
+  syncCounts();
+  renderSrcCards();
+  nav('home');
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeArtModal();
+    if (e.key === 'ArrowLeft'  && !document.getElementById('art-modal').classList.contains('hidden')) artNavPrev();
+    if (e.key === 'ArrowRight' && !document.getElementById('art-modal').classList.contains('hidden')) artNavNext();
+  });
+}
+
+init();
+</script>
+</body>
+</html>
